@@ -299,6 +299,8 @@
 	"script=boot.scr\0" \
 	"mmcboot=run load_dtb load_kernel load_initrd set_cmdline boot_kernel\0" \
 	"console=ttyS0,115200\0" \
+	"cma=96M\0" \
+	"root=/dev/mmcblk1p2\0" \
 	"load_addr=40000000\0" \
 	"fdt_addr=44000000\0" \
 	"kernel_addr=4007ffc0\0" \
@@ -336,9 +338,9 @@
 		"fatload mmc 0:1 ${load_addr} ${script}\0" \
 	"scriptboot=source ${load_addr}\0" \
 	"set_cmdline=" \
-		"setenv bootargs console=${console} ${optargs} " \
+		"setenv bootargs console=${console} console=ttyGS0,115200 cma=${cma} ${optargs} " \
 		"earlycon=uart,mmio32,0x01c28000 mac_addr=${ethaddr} " \
-		"root=${root} ro " \
+		"root=${root} rootfstype=ext4 rw " \
 		"rootwait\0" \
 	"mmcbootcmd=" \
 		"if run load_bootenv; then " \
@@ -357,6 +359,8 @@
 #define CONFIG_BOOTCOMMAND	"run mmcbootcmd"
 #define CONFIG_SYS_BOOT_GET_CMDLINE
 #define CONFIG_AUTO_COMPLETE
+
+#define CONFIG_ORANGEPI_SDCARD_BOOT 1
 
 #define CONFIG_DOS_PARTITION
 #define CONFIG_USE_IRQ
